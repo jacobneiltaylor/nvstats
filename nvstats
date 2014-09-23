@@ -1,0 +1,88 @@
+#!/usr/bin/env perl
+use lib '/usr/local/lib';
+use strict;
+use nvstats;
+use Getopt::Long;
+use POSIX;
+
+#
+# ======================================
+#  | NVIDIA Linux Statistics Frontend |
+# ======================================
+#
+# Copyright Taylor Networks 2014
+# Licensed under the GNU General Public License
+# 
+# This frontend is an example of the use of the nvstats library.
+# It was designed with Conky integration in mind.
+#
+# Usage: nvstats {arg}
+#	--video
+#	--gfx
+#	--memory
+#	--memoryTotal
+#	--memoryUsed
+#	--driver
+#	--temp
+#
+
+my $vidUtil = '';
+my $gfxUtil = '';
+my $memPercent = '';
+my $memTotal = '';
+my $memUsed = '';
+my $driver = '';
+my $temp = '';
+
+GetOptions('video' => \$vidUtil, 'gfx' => \$gfxUtil, 'memory' => \$memPercent, 'memoryTotal' => \$memTotal, 'memoryUsed' => \$memUsed, 'driver' => \$driver, 'temp' => \$temp);
+
+if($vidUtil)
+{
+	print nvVideoEngineUtilization();
+}
+else
+{
+	if($gfxUtil)
+	{
+		print nvGraphicsUtilization();
+	}
+	else
+	{
+		if($memPercent)
+		{
+			print floor(nvUsedMemoryPercentage());
+		}
+		else
+		{
+			if($memTotal)
+			{
+				print nvTotalMemory();
+			}
+			else
+			{
+				if($memUsed)
+				{
+					print nvTotalMemory();
+				}
+				else
+				{
+					if($driver)
+					{
+						print nvDriverVersion();
+					}
+					else
+					{
+						if($temp)
+						{
+							print nvCoreTemp();
+						}
+						else
+						{
+							print "\n ======================================\n  | NVIDIA Linux Statistics Frontend |\n ======================================\n\n  Usage: nvstats {arg}\n\t--video: Get the video engine usage (as a %)\n\t--gfx: Get the GPU core usage as a percentage\n\t--memory: Get the dedicated graphics memory usage as a percentage\n\t--memoryTotal: Get the total amount of graphics memory in MB\n\t--memoryUsed: Get the total amount of used graphics memory in MB\n\t--driver: Get the driver version\n\t--temp: Get the core temperature in degrees Celcius\n\n";
+						}
+					}
+				}
+			}
+		}
+	}
+}
