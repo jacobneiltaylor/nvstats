@@ -106,11 +106,7 @@ sub nvGraphicsUtilization
 
 sub nvVideoEngineUtilization
 {
-	my $searchString = "video=";
-
-	return nvGpuUtilParser($searchString);
-
-	return $retval;
+	return nvQuery("[gpu:0]/VideoDecoderUtilization");
 }
 
 sub nvDriverVersion
